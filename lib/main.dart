@@ -13,6 +13,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Películas',
       initialRoute: 'home',
+      theme: ThemeData.light().copyWith(
+        appBarTheme: const AppBarTheme(
+          color: Colors.indigo
+        )
+      ),
       routes: {
         'home': (_) => const HomeScreen(),
         'details': (_) => const DetailsScreen()
