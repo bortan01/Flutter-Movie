@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movie/src/model/movie.dart';
 import 'package:flutter_movie/src/model/now_playing_response.dart';
+import 'package:flutter_movie/src/model/popiular_response.dart';
 import 'package:http/http.dart' as http;
 
 class MoviesProvider extends ChangeNotifier {
+  MoviesProvider() {
+    getOnDisplayMovies();
+    getPopularMovies();
+  }
+
   final String _apikey = '58ece4f5ea5201f6dc37d53153377fe5';
   final String _url = "api.themoviedb.org";
   final String _languaje = "es-ES";
-  int _populares_page = 0;
-   bool _cargando = false;
+  List<Movie> onDisplayMovies = [];
+  List<Movie> popularMovies = [];
+  int _popularesPage = 0;
+  bool _cargando = false;
   // List<Pelicula> _populares = new List();
 
   // el list de peliculas hace referencia a que va a fluir al interior del stream
@@ -27,13 +36,26 @@ class MoviesProvider extends ChangeNotifier {
   //   _popularesStreamController.close();
   // }
 
-  getOnDisplayMovies() async {
-    final url = Uri.https(_url, '3/movie/now_playing', {
-      'api_key': _apikey,
-      'language': _languaje,
-    });
+  Future<String> getJsonData({required String endPoing, int page=1} ) async {
+    final url = Uri.https(_url, endPoing,
+        {'api_key': _apikey, 'language': _languaje, 'page': page.toString()});
     final response = await http.get(url);
-    final nowPlayingResponse = NowPlayingResponse.fromJson(response.body);
+    return response.body;
+  }
+
+  Future<void> getOnDisplayMovies() async {
+    final jsonData = await getJsonData(endPoing: '3/movie/now_playing');
+    final nowPlayingResponse = NowPlayingResponse.fromJson(jsonData);
+    onDisplayMovies = nowPlayingResponse.results;
+    notifyListeners();
+  }
+
+  Future<void> getPopularMovies() async {
+    _popularesPage++;
+    final jsonData = await getJsonData(endPoing: '3/movie/popular',page:  _popularesPage);
+    final popular = PopularResponse.fromJson(jsonData);
+    popularMovies = [...popularMovies, ...popular.results];
+    notifyListeners();
   }
 
   // Future<List<Pelicula>> getPopulares() async {

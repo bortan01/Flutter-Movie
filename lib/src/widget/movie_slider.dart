@@ -1,7 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movie/src/model/movie.dart';
 
-class MovieSlider extends StatelessWidget {
-  const MovieSlider({Key? key}) : super(key: key);
+class MovieSlider extends StatefulWidget {
+  const MovieSlider({
+    Key? key,
+    required this.peliculas,
+    required this.onNextPage,
+    this.titulo,
+  }) : super(key: key);
+  final List<Movie> peliculas;
+  final String? titulo;
+  final Function onNextPage;
+
+  @override
+  State<MovieSlider> createState() => _MovieSliderState();
+}
+
+class _MovieSliderState extends State<MovieSlider> {
+  final scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels + 500 >=
+          scrollController.position.maxScrollExtent) {
+        print("onNextx");
+        widget.onNextPage();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -12,17 +39,21 @@ class MovieSlider extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text("Populares",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          ),
-                        const SizedBox(height: 5),
+          if (widget.titulo != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(widget.titulo!,
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
+          const SizedBox(height: 5),
           Expanded(
             child: ListView.builder(
+              controller: scrollController,
               scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (context, index) => const _MoviePoster(),
+              itemCount: widget.peliculas.length,
+              itemBuilder: (context, index) =>
+                  _MoviePoster(pelicula: widget.peliculas[index]),
             ),
           ),
         ],
@@ -32,34 +63,39 @@ class MovieSlider extends StatelessWidget {
 }
 
 class _MoviePoster extends StatelessWidget {
-  const _MoviePoster({
-    Key? key,
-  }) : super(key: key);
+  const _MoviePoster({Key? key, required this.pelicula}) : super(key: key);
 
+  final Movie pelicula;
   @override
   Widget build(BuildContext context) {
+    final heightScreen = MediaQuery.of(context).size.height;
     print("en build ");
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       width: 130,
-      height: 190,
+      height: heightScreen * 0.2,
       color: Colors.blue,
       child: Column(
-        children:  [
+        children: [
           GestureDetector(
-            onTap: ()=> Navigator.pushNamed(context, 'details' ,arguments: 'movie-instance'),
+            onTap: () =>
+                Navigator.pushNamed(context, 'details', arguments: pelicula),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: const FadeInImage(
-                width: 130,
-                height: 190,
-                fit: BoxFit.cover,
-                  placeholder: AssetImage('assets/loading.gif'),
-                  image: NetworkImage('https://via.placeholder.com/300x400')),
+              child: FadeInImage(
+                  height: heightScreen * 0.35,
+                  fit: BoxFit.cover,
+                  placeholder: const AssetImage('assets/loading.gif'),
+                  image: NetworkImage(pelicula.fullBackdropPath)),
             ),
           ),
-              const SizedBox(height: 5),
-              const Text("Star Warss laaaa adfadf ada", maxLines: 2, overflow: TextOverflow.ellipsis,textAlign: TextAlign.center,)
+          const SizedBox(height: 5),
+          Text(
+            pelicula.title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          )
         ],
       ),
     );
