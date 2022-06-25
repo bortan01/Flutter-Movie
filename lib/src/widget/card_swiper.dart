@@ -34,7 +34,7 @@ return movies.isEmpty
                     image: NetworkImage(movies[index].fullPosterImg)),
               ),
             );
-          }),
+          },),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_movie/src/model/credits_response.dart';
 import 'package:flutter_movie/src/model/movie.dart';
 import 'package:flutter_movie/src/model/now_playing_response.dart';
 import 'package:flutter_movie/src/model/popiular_response.dart';
@@ -17,6 +18,7 @@ class MoviesProvider extends ChangeNotifier {
   List<Movie> popularMovies = [];
   int _popularesPage = 0;
   bool _cargando = false;
+  Map<int, List<Cast>> movieCast = {};
   // List<Pelicula> _populares = new List();
 
   // el list de peliculas hace referencia a que va a fluir al interior del stream
@@ -36,7 +38,7 @@ class MoviesProvider extends ChangeNotifier {
   //   _popularesStreamController.close();
   // }
 
-  Future<String> getJsonData({required String endPoing, int page=1} ) async {
+  Future<String> getJsonData({required String endPoing, int page = 1}) async {
     final url = Uri.https(_url, endPoing,
         {'api_key': _apikey, 'language': _languaje, 'page': page.toString()});
     final response = await http.get(url);
@@ -52,12 +54,20 @@ class MoviesProvider extends ChangeNotifier {
 
   Future<void> getPopularMovies() async {
     _popularesPage++;
-    final jsonData = await getJsonData(endPoing: '3/movie/popular',page:  _popularesPage);
+    final jsonData =
+        await getJsonData(endPoing: '3/movie/popular', page: _popularesPage);
     final popular = PopularResponse.fromJson(jsonData);
     popularMovies = [...popularMovies, ...popular.results];
     notifyListeners();
   }
 
+  Future<List<Cast>> getMovieCast(int movieId) async {
+    final jsonData = await getJsonData(endPoing: '3/movie/$movieId/credits');
+    final creditsResponse = CreditsResponse.fromJson(jsonData);
+    movieCast[movieId] = creditsResponse.cast;
+    print("dentro de la funcion");
+    return creditsResponse.cast;
+  }
   // Future<List<Pelicula>> getPopulares() async {
   //   if(_cargando){
   //     return [];

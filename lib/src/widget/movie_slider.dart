@@ -24,7 +24,6 @@ class _MovieSliderState extends State<MovieSlider> {
     scrollController.addListener(() {
       if (scrollController.position.pixels + 500 >=
           scrollController.position.maxScrollExtent) {
-        print("onNextx");
         widget.onNextPage();
       }
     });
@@ -32,31 +31,42 @@ class _MovieSliderState extends State<MovieSlider> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 260,
-      color: Colors.green,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (widget.titulo != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(widget.titulo!,
+    final heightScreen = MediaQuery.of(context).size.height;
+
+    return SingleChildScrollView(
+      child: Container(
+        width: double.infinity,
+        height: 260,
+        color: Colors.green,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.titulo != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  widget.titulo!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold)),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            const SizedBox(height: 5),
+            Expanded(
+              child: ListView.builder(
+                controller: scrollController,
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.peliculas.length,
+                itemBuilder: (context, index) =>
+                    _MoviePoster(pelicula: widget.peliculas[index]),
+              ),
             ),
-          const SizedBox(height: 5),
-          Expanded(
-            child: ListView.builder(
-              controller: scrollController,
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.peliculas.length,
-              itemBuilder: (context, index) =>
-                  _MoviePoster(pelicula: widget.peliculas[index]),
-            ),
-          ),
-        ],
+            SizedBox(height: heightScreen * 0.05)
+          ],
+        ),
       ),
     );
   }
@@ -73,7 +83,7 @@ class _MoviePoster extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       width: 130,
-      height: heightScreen * 0.2,
+      height: heightScreen * 0.3,
       color: Colors.blue,
       child: Column(
         children: [
@@ -83,7 +93,7 @@ class _MoviePoster extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: FadeInImage(
-                  height: heightScreen * 0.35,
+                  height: heightScreen * 0.25,
                   fit: BoxFit.cover,
                   placeholder: const AssetImage('assets/loading.gif'),
                   image: NetworkImage(pelicula.fullBackdropPath)),
@@ -95,7 +105,7 @@ class _MoviePoster extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-          )
+          ),
         ],
       ),
     );

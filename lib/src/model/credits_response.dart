@@ -61,8 +61,9 @@ class Cast {
     String? job;
 
     get fullProfilePath {
-      if ( this.profilePath != null )
-        return 'https://image.tmdb.org/t/p/w500${ this.profilePath }';
+      if ( profilePath != null ) {
+        return 'https://image.tmdb.org/t/p/w500$profilePath';
+      }
 
       return 'https://i.stack.imgur.com/GNhxO.png';
     }
@@ -77,12 +78,12 @@ class Cast {
         name: json["name"],
         originalName: json["original_name"],
         popularity: json["popularity"].toDouble(),
-        profilePath: json["profile_path"] ?? null,
-        castId: json["cast_id"] ?? null,
-        character: json["character"] == null ? null : json["character"],
+        profilePath: json["profile_path"] ?? '',
+        castId: json["cast_id"] ?? 0,
+        character: json["character"] ?? '',
         creditId: json["credit_id"],
-        order: json["order"] == null ? null : json["order"],
-        department: json["department"] == null ? null : json["department"],
-        job: json["job"] == null ? null : json["job"],
+        order: json["order"] ?? '',
+        department: json["department"] ?? '',
+        job: json["job"] ?? '',
     );
 }
