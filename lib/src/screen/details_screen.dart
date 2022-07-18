@@ -9,21 +9,24 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Movie movie = ModalRoute.of(context)?.settings.arguments as Movie;
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          _CustomAppBar(movie: movie),
-          SliverList(
-              delegate: SliverChildListDelegate(
-            [
-              _PosterAndTitle(movie: movie),
-              _OverView(movie: movie),
-              _OverView(movie: movie),
-              _OverView(movie: movie),
-              _OverView(movie: movie),
-               CastingCards(movieId: movie.id)
-            ],
-          )),
-        ],
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        top: false,
+        child: CustomScrollView(
+          slivers: [
+            _CustomAppBar(movie: movie),
+            SliverList(
+                delegate: SliverChildListDelegate(
+              [
+                _PosterAndTitle(movie: movie),
+                _OverView(movie: movie),
+                const SizedBox(height: 20),
+                CastingCards(movieId: movie.id),
+                const SizedBox(height: 20),
+              ],
+            )),
+          ],
+        ),
       ),
     );
   }
@@ -50,13 +53,16 @@ class _CustomAppBar extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Text(
               movie.title,
-              textAlign: TextAlign.center ,
+              textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 16),
             )),
-        background: FadeInImage(
-            fit: BoxFit.cover,
-            placeholder: const AssetImage('assets/loading.gif'),
-            image: NetworkImage(movie.fullBackdropPath)),
+        background: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: FadeInImage(
+              fit: BoxFit.cover,
+              placeholder: const AssetImage('assets/loading.gif'),
+              image: NetworkImage(movie.fullBackdropPath)),
+        ),
       ),
     );
   }
@@ -75,15 +81,18 @@ class _PosterAndTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
-          ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: FadeInImage(
-                fit: BoxFit.fill,
-                placeholder: const AssetImage('assets/loading.gif'),
-                image: NetworkImage(movie.fullPosterImg),
-                height: 150,
-                width: 120,
-              )),
+          Hero(
+            tag: movie.id,
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: FadeInImage(
+                  fit: BoxFit.fill,
+                  placeholder: const AssetImage('assets/loading.gif'),
+                  image: NetworkImage(movie.fullPosterImg),
+                  height: 180,
+                  width: 120,
+                )),
+          ),
           const SizedBox(
             width: 20,
           ),

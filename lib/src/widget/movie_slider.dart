@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_movie/src/model/movie.dart';
 
 class MovieSlider extends StatefulWidget {
-  const MovieSlider({
-    Key? key,
-    required this.peliculas,
-    required this.onNextPage,
-    this.titulo,
-  }) : super(key: key);
+  const MovieSlider(
+      {required this.peliculas,
+      required this.onNextPage,
+      this.titulo,
+      Key? key})
+      : super(key: key);
   final List<Movie> peliculas;
   final String? titulo;
   final Function onNextPage;
@@ -36,7 +36,7 @@ class _MovieSliderState extends State<MovieSlider> {
     return SingleChildScrollView(
       child: Container(
         width: double.infinity,
-        height: 260,
+        height: heightScreen * 0.33,
         color: Colors.green,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,7 +64,6 @@ class _MovieSliderState extends State<MovieSlider> {
                     _MoviePoster(pelicula: widget.peliculas[index]),
               ),
             ),
-            SizedBox(height: heightScreen * 0.05)
           ],
         ),
       ),
@@ -79,13 +78,12 @@ class _MoviePoster extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final heightScreen = MediaQuery.of(context).size.height;
-    print("en build ");
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       width: 130,
-      height: heightScreen * 0.3,
       color: Colors.blue,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           GestureDetector(
             onTap: () =>
@@ -93,8 +91,8 @@ class _MoviePoster extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: FadeInImage(
-                  height: heightScreen * 0.25,
                   fit: BoxFit.cover,
+                  height: heightScreen * 0.20,
                   placeholder: const AssetImage('assets/loading.gif'),
                   image: NetworkImage(pelicula.fullBackdropPath)),
             ),
