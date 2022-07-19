@@ -60,8 +60,10 @@ class _MovieSliderState extends State<MovieSlider> {
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: widget.peliculas.length,
-                itemBuilder: (context, index) =>
-                    _MoviePoster(pelicula: widget.peliculas[index]),
+                itemBuilder: (context, index) => _MoviePoster(
+                    pelicula: widget.peliculas[index],
+                    heroId:
+                        '${widget.titulo}-$index-${widget.peliculas[index].id}'),
               ),
             ),
           ],
@@ -72,12 +74,15 @@ class _MovieSliderState extends State<MovieSlider> {
 }
 
 class _MoviePoster extends StatelessWidget {
-  const _MoviePoster({Key? key, required this.pelicula}) : super(key: key);
+  const _MoviePoster({Key? key, required this.pelicula, required this.heroId})
+      : super(key: key);
 
   final Movie pelicula;
+  final String heroId;
   @override
   Widget build(BuildContext context) {
     final heightScreen = MediaQuery.of(context).size.height;
+    pelicula.heroId = heroId;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
       width: 130,
@@ -85,16 +90,21 @@ class _MoviePoster extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          GestureDetector(
-            onTap: () =>
-                Navigator.pushNamed(context, 'details', arguments: pelicula),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: FadeInImage(
-                  fit: BoxFit.cover,
-                  height: heightScreen * 0.20,
-                  placeholder: const AssetImage('assets/loading.gif'),
-                  image: NetworkImage(pelicula.fullBackdropPath)),
+          Hero(
+            tag: pelicula.heroId!,
+            child: GestureDetector(
+              onTap: () {
+                print(heroId);
+                Navigator.pushNamed(context, 'details', arguments: pelicula);
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: FadeInImage(
+                    fit: BoxFit.cover,
+                    height: heightScreen * 0.20,
+                    placeholder: const AssetImage('assets/loading.gif'),
+                    image: NetworkImage(pelicula.fullPosterImg)),
+              ),
             ),
           ),
           const SizedBox(height: 5),

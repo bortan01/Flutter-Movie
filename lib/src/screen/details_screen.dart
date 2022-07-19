@@ -57,7 +57,6 @@ class _CustomAppBar extends StatelessWidget {
               style: const TextStyle(fontSize: 16),
             )),
         background: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
           child: FadeInImage(
               fit: BoxFit.cover,
               placeholder: const AssetImage('assets/loading.gif'),
@@ -82,7 +81,7 @@ class _PosterAndTitle extends StatelessWidget {
       child: Row(
         children: [
           Hero(
-            tag: movie.id,
+            tag: movie.heroId!,
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: FadeInImage(
