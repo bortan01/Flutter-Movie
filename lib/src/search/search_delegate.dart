@@ -41,8 +41,9 @@ class MovieSearDelegate extends SearchDelegate {
       return const _NoData();
     }
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: false);
-    return FutureBuilder(
-      future: moviesProvider.searchMovies(query),
+    moviesProvider.getSuggestionByQuery(query);
+    return StreamBuilder(
+      stream: moviesProvider.suggestionStream,
       builder: (BuildContext context, AsyncSnapshot<List<Movie>> snapshot) {
         final movies = snapshot.data;
         if (!snapshot.hasData) return const _NoData();
@@ -79,12 +80,19 @@ class _MovieItem extends StatelessWidget {
   final Movie movie;
   @override
   Widget build(BuildContext context) {
+    movie.heroId = 'search-${movie.id}';
     return ListTile(
-      leading: FadeInImage(
-        placeholder: const AssetImage('assets/no-image.jpg'),
-        width: 50,
-        fit: BoxFit.contain,
-        image: NetworkImage(movie.fullPosterImg),
+      leading: Hero(
+        tag: movie.heroId!,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: FadeInImage(
+            placeholder: const AssetImage('assets/no-image.jpg'),
+            width: 50,
+            fit: BoxFit.contain,
+            image: NetworkImage(movie.fullPosterImg),
+          ),
+        ),
       ),
       title: Text(movie.title),
       subtitle: Text(movie.originalTitle),

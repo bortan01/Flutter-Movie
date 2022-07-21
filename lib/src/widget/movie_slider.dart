@@ -85,7 +85,8 @@ class _MoviePoster extends StatelessWidget {
     pelicula.heroId = heroId;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10),
-      width: 130,
+      // width: 130,
+      height: 120,
       color: Colors.blue,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
