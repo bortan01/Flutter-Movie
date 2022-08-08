@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_movie">
+    package="com.tesistours.flutter_movie">
+    <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
-        android:label="flutter_movie"
+        android:label="Movie Flutter"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

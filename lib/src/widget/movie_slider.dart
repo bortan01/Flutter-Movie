@@ -34,16 +34,16 @@ class _MovieSliderState extends State<MovieSlider> {
     final heightScreen = MediaQuery.of(context).size.height;
 
     return SingleChildScrollView(
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
         height: heightScreen * 0.33,
-        color: Colors.green,
+        // color: Colors.green,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.titulo != null)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Text(
                   widget.titulo!,
                   maxLines: 1,
@@ -84,10 +84,10 @@ class _MoviePoster extends StatelessWidget {
     final heightScreen = MediaQuery.of(context).size.height;
     pelicula.heroId = heroId;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      // width: 130,
-      height: 120,
-      color: Colors.blue,
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      width: 140,
+      // height: 120,
+      // color: Colors.blue,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -95,14 +95,14 @@ class _MoviePoster extends StatelessWidget {
             tag: pelicula.heroId!,
             child: GestureDetector(
               onTap: () {
-                print(heroId);
                 Navigator.pushNamed(context, 'details', arguments: pelicula);
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: FadeInImage(
                     fit: BoxFit.cover,
-                    height: heightScreen * 0.20,
+                    height: heightScreen * 0.22,
+                    width: 120,
                     placeholder: const AssetImage('assets/loading.gif'),
                     image: NetworkImage(pelicula.fullPosterImg)),
               ),
@@ -111,7 +111,7 @@ class _MoviePoster extends StatelessWidget {
           const SizedBox(height: 5),
           Text(
             pelicula.title,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
           ),

@@ -14,10 +14,10 @@ class CardSwiper extends StatelessWidget {
             width: double.infinity,
             child: const Center(child: CircularProgressIndicator.adaptive()),
           )
-        : Container(
+        : SizedBox(
             width: double.infinity,
             height: size.height / 2,
-            color: Colors.red,
+            // color: Colors.red,
             child: Swiper(
               itemCount: movies.length,
               layout: SwiperLayout.STACK,
