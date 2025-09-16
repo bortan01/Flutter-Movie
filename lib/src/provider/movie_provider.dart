@@ -21,9 +21,9 @@ class MoviesProvider extends ChangeNotifier {
   List<Movie> onDisplayMovies = [];
   List<Movie> popularMovies = [];
   int _popularesPage = 0;
-  bool _cargando = false;
+  final bool cargando = false;
   Map<int, List<Cast>> moviesCast = {};
-  final debauncer = Debouncer(duration: Duration(milliseconds: 500));
+  final debauncer = Debouncer(duration: const Duration(milliseconds: 500));
 
   final StreamController<List<Movie>> _suggestionStreamController =
       StreamController.broadcast();

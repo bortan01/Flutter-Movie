@@ -102,14 +102,14 @@ class _PosterAndTitle extends StatelessWidget {
               children: [
                 Text(
                   movie.title,
-                  style: textTheme.headline5,
+                  style: textTheme.headlineMedium,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   maxLines: 4,
                 ),
                 Text(
                   movie.originalTitle,
-                  style: textTheme.subtitle1,
+                  style: textTheme.labelSmall,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -122,7 +122,7 @@ class _PosterAndTitle extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       movie.voteAverage.toString(),
-                      style: textTheme.caption,
+                      style: textTheme.bodyMedium,
                     )
                   ],
                 )
@@ -146,7 +146,7 @@ class _OverView extends StatelessWidget {
       child: Text(
         movie.overview,
         textAlign: TextAlign.justify,
-        style: Theme.of(context).textTheme.subtitle1,
+        style: Theme.of(context).textTheme.titleMedium,
       ),
     );
   }
